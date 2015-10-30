@@ -1,0 +1,20 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Sample Console Application for Safe Browsing API",
+  "authors": [ "Arnaud Castaner" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "SafeBrowsingLookup": ""
+  },
+
+  "commands": {
+    "Sample": "Sample"
+  },
+
+  "frameworks": {
+    "dnx451": { }
+  }
+}
