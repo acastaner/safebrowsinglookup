@@ -1,7 +1,6 @@
 ﻿using SafeBrowsingLookup;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Framework.Configuration;
 using Microsoft.Dnx.Runtime;
@@ -34,10 +33,11 @@ namespace Sample
         {
             Console.WriteLine("====== Safe Browsing API - .NET Sample ======");
 
-            HandleUrl("gumblar.cn");
+            // This queries Google API for one URL
             HandleUrl("alarash.net");
-            HandleUrl("jbleon.org");
-            HandleUrl("miss-diamond.dj");
+
+            // This queries Google API for multiple URLs
+            HandleUrls();
             Console.WriteLine("Press any key to quit.");
             Console.ReadKey();
         }
@@ -82,6 +82,23 @@ namespace Sample
 
             }
             Console.WriteLine(consoleMessage);
+        }
+        public void HandleUrls()
+        {
+            IList<string> urls = new List<string>();
+            urls.Add("http://alarash.net"); // OK
+            urls.Add("http://gumblar.cn"); // MALWARE
+            urls.Add("http://microsoft.com"); // OK
+            urls.Add("http://google.com"); // OK
+            urls.Add("http://apple.com"); // OK
+            urls.Add("http://reddit.com"); // OK
+            urls.Add("http://amazon.com"); // OK
+            urls.Add("http://github.com"); // OK
+            IDictionary<string, ResponseType> result = client.Lookup(urls).Result;
+            foreach(KeyValuePair<string, ResponseType> entry in result)
+            {
+                Console.WriteLine("{0}: {1}", entry.Key, entry.Value.ToString());
+            }
         }
         public async Task<ResponseType> Lookup(string url)
         {

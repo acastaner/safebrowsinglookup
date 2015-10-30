@@ -12,7 +12,8 @@
     "Microsoft.Framework.Configuration.Abstractions": "1.0.0-beta8",
     "Microsoft.Framework.Configuration.FileExtensions": "1.0.0-beta8",
     "Microsoft.Framework.Configuration.Json": "1.0.0-beta8",
-    "SafeBrowsingLookup": ""
+    "SafeBrowsingLookup": "",
+    "System.Net.Http": "4.0.1-beta-23409"
   },
 
   "commands": {
