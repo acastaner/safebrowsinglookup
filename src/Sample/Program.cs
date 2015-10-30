@@ -3,16 +3,37 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Framework.Configuration;
+using Microsoft.Dnx.Runtime;
 
 namespace Sample
 {
     public class Program
     {
         private LookupClient client;
+        private IConfiguration Configuration { get; set; }
+        public Program(IApplicationEnvironment appEnv)
+        {
+            Initialize(appEnv);
+        }
+        private void Initialize(IApplicationEnvironment appEnv)
+        {
+            string jsonFile;
+#if DEBUG
+            jsonFile = "Config.local.json";
+#else
+            jsonFile = "Config.json";
+#endif
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(appEnv.ApplicationBasePath)
+                .AddJsonFile(jsonFile);
+            Configuration = builder.Build();
+            client = new LookupClient(Configuration["Data:ApiKey"], Configuration["Data:ClientName"]);
+        }
         public void Main(string[] args)
         {
             Console.WriteLine("====== Safe Browsing API - .NET Sample ======");
-            client = new LookupClient("AIzaSyAt8vyn6EcbmGzHyfhNhTdfqGn2z8RYRsY", "dotnet-sample-client");
+
             HandleUrl("gumblar.cn");
             HandleUrl("alarash.net");
             HandleUrl("jbleon.org");
