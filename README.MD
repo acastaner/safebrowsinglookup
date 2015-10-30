@@ -5,58 +5,58 @@ This library allows to easily query Google's Safe Browsing Lookup API from .NET.
 
 This project and its author are not affiliated to Google in any way.
 
-# Sample # 
+# Sample 
  
  The source code comes with a sample Console application but here are some more code samples:
  
- ```
-      LookupClient client = new LookupClient("someApiKey", "someClientName");
+ ```csharp
+LookupClient client = new LookupClient("someApiKey", "someClientName");
  ```
  
  This code will instantiate a LookupClient object. You need to provide two parameters: your Google API Key and a client name. The client name can be anything, although Google suggests you use a company name or something similar.
  
  Then it's only a matter of sending the lookup request:
  
- ```
-     ResponseType response = client.Lookup(url);
+ ```csharp
+ResponseType response = client.Lookup(url);
  ```
  
  The ResponseType is an enumerator which contain the type of response as defined by Google. Only one extra type was added, "UNKNOWN", for error handling in this library. To check the response type, something like this can be done:
  
- ```
-    switch (zob)
-            {
-                case ResponseType.OK:
-                    consoleMessage = "URL appears to be safe.";
-                    break;
+ ```csharp
+switch (zob)
+        {
+            case ResponseType.OK:
+                consoleMessage = "URL appears to be safe.";
+                break;
 
-                case ResponseType.MALWARE:
-                    consoleMessage = "URL is suspected of hosting malware.";
-                    break;
+            case ResponseType.MALWARE:
+                consoleMessage = "URL is suspected of hosting malware.";
+                break;
 
-                case ResponseType.MALWARE_UNWANTED:
-                    consoleMessage = "URL is suspected of hosting malware and unwanted software.";
-                    break;
+            case ResponseType.MALWARE_UNWANTED:
+                consoleMessage = "URL is suspected of hosting malware and unwanted software.";
+                break;
 
                 case ResponseType.PHISHING:
-                    consoleMessage = "URL is suspected of phishing.";
-                    break;
+                consoleMessage = "URL is suspected of phishing.";
+                break;
 
-                case ResponseType.PHISHING_MALWARE:
-                    consoleMessage = "URL is suspected of phishing and hosting malware.";
-                    break;
+            case ResponseType.PHISHING_MALWARE:
+                consoleMessage = "URL is suspected of phishing and hosting malware.";
+                break;
 
-                case ResponseType.PHISHING_MALWARE_UNWANTED:
-                    consoleMessage = "URL is suspected of phishing and hosting malware and unwanted software.";
-                    break;
+            case ResponseType.PHISHING_MALWARE_UNWANTED:
+                consoleMessage = "URL is suspected of phishing and hosting malware and unwanted software.";
+                break;
 
-                case ResponseType.PHISHING_UNWANTED:
-                    consoleMessage = "URL is suspected of phishing and hosting unwanted software.";
-                    break;
+            case ResponseType.PHISHING_UNWANTED:
+                consoleMessage = "URL is suspected of phishing and hosting unwanted software.";
+                break;
 
-                case ResponseType.UNWANTED:
-                    consoleMessage = "URL is suspected of hosting unwanted software.";
-                    break;
+            case ResponseType.UNWANTED:
+                consoleMessage = "URL is suspected of hosting unwanted software.";
+                break;
 
-            }
+        }
  ```
