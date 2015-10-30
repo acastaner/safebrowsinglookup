@@ -1,7 +1,7 @@
 Safe Browsing Lookup .NET API
 =========
 
-This library allows to easily query Google's Safe Browsing Lookup API from .NET. It's a library package compatible with .NET 4.5 and ASP.NET 5 (CoreCLR and otherwise). Please note that this library doesn't offer any guarantee of protection - a website deemed safe could have malware, or a website can be incorrectly flagged as hosting unwated software. Google works to provide the most accurate and up-to-date phishing, malware, and unwanted software information. However, Google cannot guarantee that its information is comprehensive and error-free: some risky sites may not be identified, and some safe sites may be identified in error. 
+This library allows to easily query [Google's Safe Browsing Lookup API](https://developers.google.com/safe-browsing/index) from .NET. It's a library package compatible with .NET 4.5 and ASP.NET 5 (CoreCLR and otherwise). Please note that this library doesn't offer any guarantee of protection - a website deemed safe could host malware, or a website can be incorrectly flagged as hosting unwanted software. Google works to provide the most accurate and up-to-date phishing, malware, and unwanted software information. However, Google cannot guarantee that its information is comprehensive and error-free: some risky sites may not be identified, and some safe sites may be identified in error. 
 
 This project and its author are not affiliated to Google in any way.
 
@@ -21,10 +21,10 @@ LookupClient client = new LookupClient("someApiKey", "someClientName");
 ResponseType response = client.Lookup(url);
  ```
  
- The ResponseType is an enumerator which contain the type of response as defined by Google. Only one extra type was added, "UNKNOWN", for error handling in this library. To check the response type, something like this can be done:
+ The ResponseType is an enumerator which contains the type of response as defined by Google. Only one extra type was added, "UNKNOWN", for error handling in this library. To check the response type, something like this can be done:
  
  ```csharp
-switch (zob)
+switch (response)
         {
             case ResponseType.OK:
                 consoleMessage = "URL appears to be safe.";
