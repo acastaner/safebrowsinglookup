@@ -32,19 +32,17 @@ namespace SafeBrowsingLookup
 
             HttpClient = new HttpClient(HttpClientHandler);
             HttpClient.BaseAddress = new Uri("https://sb-ssl.google.com/safebrowsing/api/lookup?");
-            //HttpClient.DefaultRequestHeaders.Accept.Clear();
-            //HttpClient.DefaultRequestHeaders.Accept.ParseAdd("application/json");
-            //HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Safe Browsing API .NET Client/0.1");
+            HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Safe Browsing API .NET Client/" + ClientVersion);
+            SetupRequestUrl();
         }
-        private void SetRequestUrl(string lookupUrl)
+        private void SetupRequestUrl()
         {
             using (var content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
             {
                 new KeyValuePair<string, string>("client", ClientName),
                 new KeyValuePair<string, string>("key", ApiKey),
                 new KeyValuePair<string, string>("appver", ClientVersion),
-                new KeyValuePair<string, string>("pver", ProtocolVersion),
-                new KeyValuePair<string, string>("url", WebUtility.UrlEncode(lookupUrl)),
+                new KeyValuePair<string, string>("pver", ProtocolVersion)
             }
             ))
                 {
@@ -61,8 +59,8 @@ namespace SafeBrowsingLookup
         }
         public async Task<ResponseType> Lookup(string url)
         {
-            SetRequestUrl(url);
-            HttpResponseMessage response = await HttpClient.GetAsync(RequestUrl);
+            string requestUrl = RequestUrl + "&url=" + WebUtility.UrlEncode(url);
+            HttpResponseMessage response = await HttpClient.GetAsync(requestUrl);
             // If URL is safe Google returns a 204 status code so we can just break here if that's the case
             if ((int)response.StatusCode == 204)
                 return ResponseType.OK;
@@ -70,10 +68,23 @@ namespace SafeBrowsingLookup
             var content = await response.Content.ReadAsStringAsync();
             return await CategorizeContent(content);
         }
+        public async Task<IDictionary<string, ResponseType>> Lookup(IList<string> urls)
+        {
+            string content = urls.Count.ToString();
+            foreach (string url in urls)
+                content += "\n" + url;
+
+            StringContent sc = new StringContent(content);
+            HttpResponseMessage response = await HttpClient.PostAsync(RequestUrl, new StringContent(content));
+            string responseContent = await response.Content.ReadAsStringAsync();
+            return await SplitResponseTypes(responseContent, urls);
+        }
         public async Task<ResponseType> CategorizeContent(string content)
         {
             switch (content)
             {
+                case "ok":
+                    return ResponseType.OK;
                 case "phishing":
                     return ResponseType.PHISHING;
                 case "malware":
@@ -91,6 +102,17 @@ namespace SafeBrowsingLookup
                 default:
                     return ResponseType.UNKNOWN;
             }
+        }
+        public async Task<IDictionary<string, ResponseType>> SplitResponseTypes(string content, IList<string> urls)
+        {
+            string[] lines = content.Split('\n');
+            IDictionary<string, ResponseType> result = new Dictionary<string, ResponseType>();
+            for(int i = 0; i <= lines.Count() - 1; i++)
+            {
+                ResponseType responseType = await CategorizeContent(lines[i]);
+                result.Add(urls[i], responseType);
+            }
+            return result;
         }
     }
 }
