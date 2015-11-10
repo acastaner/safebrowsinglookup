@@ -1,0 +1,26 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Sample Console Application for Safe Browsing API",
+  "authors": [ "Arnaud Castaner" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "Microsoft.Dnx.Runtime.Abstractions": "1.0.0-beta8",
+    "Microsoft.Framework.Configuration": "1.0.0-beta8",
+    "Microsoft.Framework.Configuration.Abstractions": "1.0.0-beta8",
+    "Microsoft.Framework.Configuration.FileExtensions": "1.0.0-beta8",
+    "Microsoft.Framework.Configuration.Json": "1.0.0-beta8",
+    "SafeBrowsingLookup": "",
+    "System.Net.Http": "4.0.1-beta-23409"
+  },
+
+  "commands": {
+    "Sample": "Sample"
+  },
+
+  "frameworks": {
+    "dnx451": { }
+  }
+}
